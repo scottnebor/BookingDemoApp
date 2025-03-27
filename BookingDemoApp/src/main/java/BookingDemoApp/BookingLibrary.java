@@ -86,7 +86,7 @@ public class BookingLibrary{
         LocalTime appointmentTime = clinicOpenTime;
         while (appointmentTime.isBefore(clinicCloseTime)){
 
-            //is the event within 2 hours or less.   If so, don't
+            //is the event within 2 hours or less.   If so, skip to the next slot
             LocalDateTime ldt = LocalDateTime.of(appointmentDate, appointmentTime);
             if(ldt.isBefore(currentTime.plusHours(MIN_BOOKING_TIME_HOURS))){
                 appointmentTime = appointmentTime.plusMinutes(BOOKING_INTERVAL_MINUTES);
@@ -156,6 +156,7 @@ public class BookingLibrary{
     
     /*
      * function returns how many minutes are free starting at a specific time, accounting for existing appointments.
+     * function assumes that all appointments in AppointmentList are for the same date
      */
     protected int MinutesFreeAtTimeslot(AppointmentList bookedAppointmentList, LocalTime timeSlotStart, LocalTime clinicCloseTime){
         ;
@@ -168,9 +169,9 @@ public class BookingLibrary{
         for(int counter=0;counter<bookedAppointmentList.GetAppointmentListSize();counter++){
         
             Appointment appointment = bookedAppointmentList.GetAppointment(counter);
-            LocalTime appointmentStartsAtTime = appointment.GetAppointmentStartTime().toLocalTime();
-            LocalTime appointmentEndAtTime = appointment.GetAppointmentStartTime().toLocalTime().plusMinutes(appointment.GetAppointmentType().GetLengthMinutes());
-
+            LocalTime appointmentStartsAtTime = appointment.GetAppointmentStartLocalTime();
+            LocalTime appointmentEndAtTime = appointment.GetAppointmentStartLocalTime().plusMinutes(appointment.GetAppointmentType().GetLengthMinutes());
+     
       
 
             //does the timeSlot fall within a booked appointment.  If so, then return immediately that there's no time free

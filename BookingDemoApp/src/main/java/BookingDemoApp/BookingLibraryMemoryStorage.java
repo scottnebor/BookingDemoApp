@@ -20,7 +20,7 @@ public class BookingLibraryMemoryStorage extends BookingLibraryAbstractStorage{
      * Store's an appointment for date.   It does no validion on details of the appointment, or whether there are conflicting appointments.
      */
     public void StoreAppointment(Appointment appointment){
-        String key = appointment.GetAppointmentStartTime().toLocalDate().format(bookingLibraryDateFormatter);
+        String key = appointment.GetAppointmentStartLocalDateTime().format(bookingLibraryDateFormatter);
         if(!appointmentDateListMap.containsKey(key))
             appointmentDateListMap.put(key, new AppointmentList());
         appointmentDateListMap.get(key).AddAppointment(appointment);

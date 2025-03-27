@@ -184,7 +184,7 @@ public class BookingLibraryTest {
         assertTrue(appointmentSlot.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(appointmentSlot.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
 
-        //get the 10:00 AM slot
+        //get the 10:00 AM slot 
         appointmentSlot = bl.GetAvailableAppointmentTimes(LocalDate.of(2025,3,21)).GetAppointmentsSlot(1);
         assertEquals(0,appointmentSlot.GetAppointmentStartTime().compareTo(LocalTime.of(10,0,0)));
         assertTrue(appointmentSlot.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
@@ -257,10 +257,10 @@ public class BookingLibraryTest {
         
         
         //verify that events are sorted in the right order and that each events time is correct
-        assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,20)).GetAppointment(0).GetAppointmentStartTime().equals(LocalDateTime.of(2025,3,20,9,0,0)));   
-        assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,20)).GetAppointment(1).GetAppointmentStartTime().equals(LocalDateTime.of(2025,3,20,11,0,0)));
-        assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,20)).GetAppointment(2).GetAppointmentStartTime().equals(LocalDateTime.of(2025,3,20,13,0,0)));
-        assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,21)).GetAppointment(0).GetAppointmentStartTime().equals(LocalDateTime.of(2025,3,21,13,0,0)));   
+        assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,20)).GetAppointment(0).GetAppointmentStartLocalDateTime().equals(LocalDateTime.of(2025,3,20,9,0,0)));   
+        assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,20)).GetAppointment(1).GetAppointmentStartLocalDateTime().equals(LocalDateTime.of(2025,3,20,11,0,0)));
+        assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,20)).GetAppointment(2).GetAppointmentStartLocalDateTime().equals(LocalDateTime.of(2025,3,20,13,0,0)));
+        assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,21)).GetAppointment(0).GetAppointmentStartLocalDateTime().equals(LocalDateTime.of(2025,3,21,13,0,0)));   
 
         //verify that each events type
         assertTrue(bl.GetPractitionerBookedAppointments(LocalDate.of(2025,3,20)).GetAppointment(0).GetAppointmentType() == AppointmentType.appointmentTypeCheckin);
