@@ -1,4 +1,4 @@
-package scottnebor;
+package BookingDemoApp.Appointments;
 import java.util.*;
 import java.time.*;
 
@@ -6,7 +6,7 @@ import java.time.*;
 /*
  * This class represents a appointment time slot.  It lists the start time, and the allowed appointment types that can be booked into the slot
  */
-class AppointmentSlot{
+public class AppointmentSlot{
     
     protected ArrayList<AppointmentType> allowedAppointmentTypes;
     protected LocalTime appointmentStartTime;

@@ -1,4 +1,4 @@
-package scottnebor;
+package BookingDemoApp.Appointments;
 import java.util.*;
 import java.time.*;
 
@@ -7,7 +7,7 @@ import java.time.*;
  * this class represents a list of appointment slots.
  * the list is maintained in a sorted order by time
  */
-class AppointmentSlotList{
+public class AppointmentSlotList{
     protected ArrayList<AppointmentSlot> appointmentSlots;
     public AppointmentSlotList(){
 

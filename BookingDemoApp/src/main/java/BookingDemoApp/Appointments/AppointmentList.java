@@ -1,11 +1,11 @@
-package scottnebor;
+package BookingDemoApp.Appointments;
 import java.util.*;
 import java.time.*;
 
 /*
  * this class stores a collection of appointments
  */
-class AppointmentList{
+public class AppointmentList{
     protected ArrayList<Appointment> appointments;
 
     /*

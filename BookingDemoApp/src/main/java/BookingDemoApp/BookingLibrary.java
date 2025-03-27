@@ -1,8 +1,8 @@
-package scottnebor;
+package BookingDemoApp;
 
 import java.time.*;
-
-
+import BookingDemoApp.Storage.*;
+import BookingDemoApp.Appointments.*;
 /*
  * This is the main class that integrators would use for the booking library.  It has three core functions
  *  BookAppointment

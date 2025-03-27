@@ -1,11 +1,13 @@
-package scottnebor;
+package BookingDemoApp.Appointments;
 import java.time.*;
+
+
 
 /*
  * this class represents an appointment with an appointment date/time and appointment type
  * 
  */
-class Appointment{
+public class Appointment{
     
     protected AppointmentType appointmentType;
     protected LocalDateTime appointmentStartTime;
@@ -16,7 +18,6 @@ class Appointment{
     public Appointment(AppointmentType appointmentType, LocalDateTime appointmentStartTime){
         this.appointmentType = appointmentType;
         this.appointmentStartTime = appointmentStartTime;
-
     }
 
     /*

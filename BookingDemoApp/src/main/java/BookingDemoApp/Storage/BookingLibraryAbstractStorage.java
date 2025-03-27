@@ -1,6 +1,8 @@
-package scottnebor;
+package BookingDemoApp.Storage;
 import java.time.*;
 
+import BookingDemoApp.*;
+import BookingDemoApp.Appointments.*;
 
 /*
  * Interface for storing bookings for a single practitioner.  Supports Adding an appointment, and getting appointments 

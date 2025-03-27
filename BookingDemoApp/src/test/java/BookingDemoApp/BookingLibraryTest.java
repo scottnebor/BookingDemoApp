@@ -1,10 +1,12 @@
-package scottnebor;
+package BookingDemoApp;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;
 
+import BookingDemoApp.*;
+import BookingDemoApp.Appointments.*;
 
 public class BookingLibraryTest {
 
@@ -129,12 +131,12 @@ public class BookingLibraryTest {
         AppointmentSlot secondLastAppointment  = bl.GetAvailableAppointmentTimes(LocalDate.of(2025,3,20)).GetAppointmentsSlot(10);
         AppointmentSlot lastAppointment  = bl.GetAvailableAppointmentTimes(LocalDate.of(2025,3,20)).GetAppointmentsSlot(11);
         
-        assertEquals(0,firstAppointment.GetAppointmentStartTime().compareTo(LocalTime.of(11,0,0)));
 
+        //verify that appointmentTimes match expectations
+        assertEquals(0,firstAppointment.GetAppointmentStartTime().compareTo(LocalTime.of(11,0,0)));
         assertTrue(firstAppointment.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(firstAppointment.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(firstAppointment.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,firstAppointment.GetAppointmentStartTime().compareTo(LocalTime.of(11,0,0)));
         
         assertTrue(thirdAppointment.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(thirdAppointment.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
@@ -175,6 +177,7 @@ public class BookingLibraryTest {
             //available slots left should be 9:30, 10, 10:30, 12:30, 2, 2:30, 3:00, 3:30, 4, 4:30 - 10 total
             
         });
+        //verify that the correct number of events are listed
         assertEquals(10,bl.GetAvailableAppointmentTimes(LocalDate.of(2025,3,21)).GetAppointmentSlotListSize());
 
         //get the 9 AM slot
@@ -230,7 +233,15 @@ public class BookingLibraryTest {
         assertTrue(appointmentSlot.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertFalse(appointmentSlot.IsAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
         
-        //TODO - book at 4, run through a few more tests
+
+        //book one at the tail end of the day
+        assertDoesNotThrow(() -> {
+            bl.BookAppointment(AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,21,16,0,0));
+            //available slots left should be 9:30, 10, 10:30, 12:30, 3:00, 3:30 - 6 total
+            
+        });
+        assertEquals(6,bl.GetAvailableAppointmentTimes(LocalDate.of(2025,3,21)).GetAppointmentSlotListSize());
+
     }
 
     @Test

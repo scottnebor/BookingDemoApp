@@ -1,8 +1,12 @@
-package scottnebor;
+package BookingDemoApp.Storage;
+
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+
+import BookingDemoApp.*;
+import BookingDemoApp.Appointments.*;
 
 /*
  * This is an memory only storage for booking appointments.  It's used for demo purposes, but would never be used outside of a test environment.

@@ -1,4 +1,4 @@
-package scottnebor;
+package BookingDemoApp.Appointments;
 
 /*
  * This class holds details on appointment types. 
@@ -6,7 +6,7 @@ package scottnebor;
  * appointment types are the same other than duration, we'll still with one class with a duration property.
  * The class is private and has a static instance for each appointment type
  */
-class AppointmentType{
+public class AppointmentType{
     /*
      * define appointment lengths
      */
