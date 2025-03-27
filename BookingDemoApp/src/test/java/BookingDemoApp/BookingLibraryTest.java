@@ -22,55 +22,55 @@ public class BookingLibraryTest {
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,19,10,0,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event from today, but with less than 2 hours notice
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,10,30,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event from today, but at 5 PM
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,17,0,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event from today, but after 5 PM
         e = assertThrows(BookingLibraryException.class, () -> {        
             bl.BookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,17,30,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event from today, not on 30 minute interval
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,12,31,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event from today, but it will end after 5 PM
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeConsult,LocalDateTime.of(2025,3,20,16,0,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event from today, but it will end after 5 PM
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,16,30,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event from tomorrow, but too early
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,21,8,30,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());  
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());  
 
         //event from tomorrow, but too late
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,21,17,30,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());  
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());  
 
 
 
@@ -83,19 +83,19 @@ public class BookingLibraryTest {
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,13,30,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event that overlaps with a booked event
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,13,0,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //event that overlaps with a booked event
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeConsult,LocalDateTime.of(2025,3,20,12,30,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
 
         //dump the date forward
         bl.OverrideCurrentTime(LocalDateTime.of(2025,3,25,9,0,0));
@@ -104,7 +104,7 @@ public class BookingLibraryTest {
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.BookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,24,9,0,0) );
         });
-        assertEquals(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
+        assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.GetBookingLibraryExceptionErrorCode());
     }
     
 

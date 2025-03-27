@@ -2,41 +2,36 @@ package scottnebor;
 import java.util.*;
 import java.time.*;
 
-//List of appointments that are booked on a given day
 
+/*
+ * this class represents a list of appointment slots.
+ * the list is maintained in a sorted order by time
+ */
 class AppointmentSlotList{
-    ArrayList<AppointmentSlot> appointmentSlots;
-    AppointmentSlotList(){
+    protected ArrayList<AppointmentSlot> appointmentSlots;
+    public AppointmentSlotList(){
 
         appointmentSlots = new ArrayList<AppointmentSlot>();
     }
 
-    void AddAppointmentSlot(AppointmentSlot appointmentSlot){
+    public void AddAppointmentSlot(AppointmentSlot appointmentSlot){
         appointmentSlots.add(appointmentSlot);
+
+        //sorting after each add call isn't optimal from a performance perspective.  However, the number of AppointmentSlots in the list
+        //will be small.  As such, simplicity was favoured over performance
+        appointmentSlots.sort((AppointmentSlot a, AppointmentSlot b) -> { return a.GetAppointmentStartTime().compareTo(b.GetAppointmentStartTime()); } );
     }
 
-    int GetAppointmentSlotListSize(){
+    public int GetAppointmentSlotListSize(){
         return appointmentSlots.size();
     }
 
-    //todo - document that it is the callers responsibility to ensure a valid index
-    AppointmentSlot GetAppointmentsSlot(int index){
+    
+    public AppointmentSlot GetAppointmentsSlot(int index){
         return appointmentSlots.get(index);
     }
 
     
-    boolean CanBookAppointment(AppointmentType appointmentType, LocalTime lt){
-        Iterator<AppointmentSlot> iterator = appointmentSlots.iterator();
-        while(iterator.hasNext()){
-            AppointmentSlot sl = iterator.next();
-            if(!sl.GetAppointmentStartTime().equals(lt))
-                continue;
-            if(sl.IsAppointmentTypeAllowed(appointmentType))
-                return true;
-        }
-        return false;
-    
-    }
     
 
 }

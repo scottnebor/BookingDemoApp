@@ -2,60 +2,44 @@ package scottnebor;
 import java.util.*;
 import java.time.*;
 
-//List of appointments that are booked
-
+/*
+ * this class stores a collection of appointments
+ */
 class AppointmentList{
-    ArrayList<Appointment> appointments;
-    AppointmentList(){
+    protected ArrayList<Appointment> appointments;
+
+    /*
+     * constructor
+     */
+    public AppointmentList(){
 
         appointments = new ArrayList<Appointment>();
     }
 
-    void AddAppointment(Appointment appointment){
+    /*
+     * adds an appointment.  Caller assumes validation checking to ensure that the appointment is valid
+     */
+    public void AddAppointment(Appointment appointment){
         appointments.add(appointment);
+
+        //sorting after each add call isn't optimal from a performance perspective.  However, the number of Appointments in the list
+        //will be small.  As such, simplicity was favoured over performance
         appointments.sort((Appointment a, Appointment b) -> { return a.GetAppointmentStartTime().compareTo(b.GetAppointmentStartTime()); } );
     }
 
-    int GetAppointmentListSize(){
+    /*
+     * returns the number of appointments in the last
+     */
+    public int GetAppointmentListSize(){
         return appointments.size();
     }
 
     //todo - document that it is the callers responsibility to ensure a valid index
-    Appointment GetAppointment(int index){
+    public Appointment GetAppointment(int index){
         return appointments.get(index);
     }
     
 
-    int MinutesFreeAtTimeslot(LocalTime lt, LocalTime clinicCloseTime){
-        ;
-        if(lt.isAfter(clinicCloseTime))
-            return 0;
-        int maxMinutesFree = (int)Duration.between(lt, clinicCloseTime).getSeconds()/60;
-        
-        Iterator<Appointment> iterator = appointments.iterator();
-        while(iterator.hasNext()){
-            Appointment appointment = iterator.next();
-            LocalTime appointmentStartsAtTime = appointment.GetAppointmentStartTime().toLocalTime();
-            LocalTime appointmentEndAtTime = appointment.GetAppointmentStartTime().toLocalTime().plusMinutes(appointment.GetAppointmentType().GetLengthMinutes());
-
-      
-
-            if(lt.compareTo(appointmentStartsAtTime) >=0  && lt.compareTo(appointmentEndAtTime) <0)
-                maxMinutesFree = 0;
-            if(appointmentStartsAtTime.isAfter(lt)){
-                int minutesAfter = (int)Duration.between(lt, appointmentStartsAtTime).getSeconds()/60;
-                maxMinutesFree = Math.min(minutesAfter, maxMinutesFree);
-            }
-            if(appointmentEndAtTime.isAfter(lt)){
-                int minutesAfter = (int)Duration.between(lt, appointmentEndAtTime).getSeconds()/60;
-                maxMinutesFree = Math.min(minutesAfter, maxMinutesFree);
-            }
-            
-                
-        }
-        return maxMinutesFree;
-
-    }
 
 
 

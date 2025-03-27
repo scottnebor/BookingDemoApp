@@ -2,8 +2,15 @@ package scottnebor;
 
 import java.time.*;
 
-//DON'T FORGET - thread safety 
-//explain choice on localdate/localdate/localtime time
+
+/*
+ * This is the main class that integrators would use for the booking library.  It has three core functions
+ *  BookAppointment
+ *  GetAvailableAppointmentTimes
+ *  GetPractitionerBookedAppointments
+ * 
+ * Appointment booking only last the lifetime of this class.  It does not persisently store anything
+ */
 public class BookingLibrary{
     protected static final int CLINIC_OPEN_TIME_HOUR    = 9;   //9 AM - clinic start time
     protected static final int CLINIC_OPEN_TIME_MIN     = 0;   
@@ -15,12 +22,18 @@ public class BookingLibrary{
 
     protected static final int BOOKING_INTERVAL_MINUTES  = 30;// appointments must be booked on 30 minute intervals
     
+    protected static final int MIN_BOOKING_TIME_HOURS  = 2;// appointments must be booked at least 2 hours in advance
+    
 
 
     protected BookingLibraryAbstractStorage bookingLibraryStorage;
     protected LocalTime clinicOpenTime;
     protected LocalTime clinicCloseTime;
     protected LocalDateTime currentTime;
+
+    /*
+     * constructor
+     */
     public BookingLibrary(){
         bookingLibraryStorage = new BookingLibraryMemoryStorage();
         clinicOpenTime = LocalTime.of(CLINIC_OPEN_TIME_HOUR, CLINIC_OPEN_TIME_MIN, CLINIC_OPEN_TIME_SECOND);
@@ -29,50 +42,67 @@ public class BookingLibrary{
     }
 
     
-    void OverrideCurrentTime(LocalDateTime overrideTime){
+    /*
+     * function should only be using by junit.  This function can be used to simulate a different date/time than the current time
+     */
+    public synchronized void OverrideCurrentTime(LocalDateTime overrideTime){
         currentTime = overrideTime;
 
     }
 
-    void BookAppointment(AppointmentType appointmentType, LocalDateTime appointmentStartDateTime) throws BookingLibraryException{
+    /*
+     * Books an appointment.  Throws an exception if the appointment cannot be booked for the given date/time
+     */
+    public synchronized void BookAppointment(AppointmentType appointmentType, LocalDateTime appointmentStartDateTime) throws BookingLibraryException{
         
 
         AppointmentSlotList appointmentSlotList = GetAvailableAppointmentTimes(appointmentStartDateTime.toLocalDate());
         
-        if(appointmentSlotList.CanBookAppointment(appointmentType, appointmentStartDateTime.toLocalTime())){
+        if(CanBookAppointment(appointmentSlotList,appointmentType, appointmentStartDateTime.toLocalTime())){
             Appointment appointment = new Appointment(appointmentType, appointmentStartDateTime);
             bookingLibraryStorage.StoreAppointment(appointment); 
         }
         else{
-            throw new BookingLibraryException(BookingLibraryException.BOOKING_EXCEPTION_INVALID_DATETIME);
+            throw new BookingLibraryException(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME);
         }
     }
 
+    
 
-    AppointmentSlotList GetAvailableAppointmentTimes(LocalDate appointmentDate){
+    /*
+     * function that returns a list of Appointments (time, and appointment type) for a given date
+     */
+    public synchronized AppointmentSlotList GetAvailableAppointmentTimes(LocalDate appointmentDate){
         
-        if(appointmentDate.isBefore(currentTime.toLocalDate()))
-            return new AppointmentSlotList(); //return an empty list
 
-        LocalTime lt = clinicOpenTime;
+        
         AppointmentSlotList appointmentSlotList = new AppointmentSlotList();
 
 
+        ///Get all existing appointments
         AppointmentList bookedAppointmentList = bookingLibraryStorage.GetAppointments(appointmentDate);
-        while (lt.isBefore(clinicCloseTime)){
-            LocalDateTime ldt = LocalDateTime.of(appointmentDate, lt);
-            if(ldt.isBefore(currentTime.plusHours(2))){
-                lt = lt.plusMinutes(BOOKING_INTERVAL_MINUTES);
+
+        //loop through all timeslot in the day starting at the clinic open time
+        LocalTime appointmentTime = clinicOpenTime;
+        while (appointmentTime.isBefore(clinicCloseTime)){
+
+            //is the event within 2 hours or less.   If so, don't
+            LocalDateTime ldt = LocalDateTime.of(appointmentDate, appointmentTime);
+            if(ldt.isBefore(currentTime.plusHours(MIN_BOOKING_TIME_HOURS))){
+                appointmentTime = appointmentTime.plusMinutes(BOOKING_INTERVAL_MINUTES);
                 continue;
             }
             
             
 
+            //build an appointmentSlot
+            AppointmentSlot appointmentSlot = new AppointmentSlot(appointmentTime);
 
-            AppointmentSlot appointmentSlot = new AppointmentSlot(lt);
 
-            int numMinutesFree = bookedAppointmentList.MinutesFreeAtTimeslot(lt,clinicCloseTime);
+            //how many minutes are free at the current appointmentSlotTime
+            int numMinutesFree = MinutesFreeAtTimeslot(bookedAppointmentList,appointmentTime,clinicCloseTime);
             
+            //check if we have enough time for each appointmentType
             if(numMinutesFree>= AppointmentType.appointmentTypeCheckin.GetLengthMinutes()){
                 appointmentSlot.AddAllowedAppointmentType(AppointmentType.appointmentTypeCheckin);
             }
@@ -83,12 +113,12 @@ public class BookingLibrary{
                 appointmentSlot.AddAllowedAppointmentType(AppointmentType.appointmentTypeConsult);
             }
         
-
+            //did we add at least one appointmentType.  If so, then add the appointmentSlot to the list
             if(appointmentSlot.HasAppointmentTypes()){
                 appointmentSlotList.AddAppointmentSlot(appointmentSlot);
             }
             
-            lt = lt.plusMinutes(BOOKING_INTERVAL_MINUTES);
+            appointmentTime = appointmentTime.plusMinutes(BOOKING_INTERVAL_MINUTES);
 
         }
         return appointmentSlotList;
@@ -98,10 +128,67 @@ public class BookingLibrary{
 
     }
 
-    AppointmentList GetPractitionerBookedAppointments(LocalDate appointmentDate){
+    
+
+    /*
+     * function lists all booked appointments for a day
+     */
+    public synchronized AppointmentList GetPractitionerBookedAppointments(LocalDate appointmentDate){
         return bookingLibraryStorage.GetAppointments(appointmentDate);
     }
 
+
+    /*
+     * given a list of slots, determine if there's one with a matching time and an appointment type that's allowed
+     */
+    protected boolean CanBookAppointment(AppointmentSlotList appointmentSlotList,AppointmentType appointmentType, LocalTime lt){
+        for(int counter=0;counter<appointmentSlotList.GetAppointmentSlotListSize();counter++){
+       
+            AppointmentSlot sl = appointmentSlotList.GetAppointmentsSlot(counter);
+            if(!sl.GetAppointmentStartTime().equals(lt))
+                continue;
+            if(sl.IsAppointmentTypeAllowed(appointmentType))
+                return true;
+        }
+        return false;
+    
+    }
+    
+    /*
+     * function returns how many minutes are free starting at a specific time, accounting for existing appointments.
+     */
+    protected int MinutesFreeAtTimeslot(AppointmentList bookedAppointmentList, LocalTime timeSlotStart, LocalTime clinicCloseTime){
+        ;
+        if(timeSlotStart.isAfter(clinicCloseTime))
+            return 0;
+
+        //how many minutes are free from timeSlotStart to clinicClose time
+        int maxMinutesFree = (int)Duration.between(timeSlotStart, clinicCloseTime).getSeconds()/60;
+        
+        for(int counter=0;counter<bookedAppointmentList.GetAppointmentListSize();counter++){
+        
+            Appointment appointment = bookedAppointmentList.GetAppointment(counter);
+            LocalTime appointmentStartsAtTime = appointment.GetAppointmentStartTime().toLocalTime();
+            LocalTime appointmentEndAtTime = appointment.GetAppointmentStartTime().toLocalTime().plusMinutes(appointment.GetAppointmentType().GetLengthMinutes());
+
+      
+
+            //does the timeSlot fall within a booked appointment.  If so, then return immediately that there's no time free
+            if(timeSlotStart.compareTo(appointmentStartsAtTime) >=0  && timeSlotStart.compareTo(appointmentEndAtTime) <0)
+                return 0;
+
+            //check if the appointment starts after timeSlotStart.  If so, potentially reduce maxMinutesFree
+            if(appointmentStartsAtTime.isAfter(timeSlotStart)){
+                int minutesAfter = (int)Duration.between(timeSlotStart, appointmentStartsAtTime).getSeconds()/60;
+                maxMinutesFree = Math.min(minutesAfter, maxMinutesFree);
+            }
+            
+            
+                
+        }
+        return maxMinutesFree;
+
+    }
 
 
     public static void main(String[] args) {
