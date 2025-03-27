@@ -30,14 +30,14 @@ public class Appointment{
     /*
      * return appointment date/time
      */
-    public LocalDateTime getAppointmentStartLocalDateTime(){
+    public LocalDateTime getAppointmentStartDateTime(){
         return this.appointmentStartTime;
     }
 
     /*
      * return appointment date/time
      */
-    public LocalTime getAppointmentStartLocalTime(){
+    public LocalTime getAppointmentStartTime(){
         return this.appointmentStartTime.toLocalTime();
     }
 }

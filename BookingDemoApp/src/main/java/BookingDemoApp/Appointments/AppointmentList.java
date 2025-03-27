@@ -24,7 +24,7 @@ public class AppointmentList{
 
         //sorting after each add call isn't optimal from a performance perspective.  However, the number of Appointments in the list
         //will be small.  As such, simplicity was favoured over performance
-        appointments.sort((Appointment a, Appointment b) -> { return a.getAppointmentStartLocalDateTime().compareTo(b.getAppointmentStartLocalDateTime()); } );
+        appointments.sort((Appointment a, Appointment b) -> { return a.getAppointmentStartDateTime().compareTo(b.getAppointmentStartDateTime()); } );
     }
 
     /*

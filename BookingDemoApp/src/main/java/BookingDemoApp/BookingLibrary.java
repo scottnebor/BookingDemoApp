@@ -145,7 +145,7 @@ public class BookingLibrary{
         for(int counter=0;counter<appointmentSlotList.getAppointmentSlotListSize();counter++){
        
             AppointmentSlot sl = appointmentSlotList.getAppointmentsSlot(counter);
-            if(!sl.getAppointmentStartTime().equals(lt))
+            if(!sl.getAppointmentSlotStartTime().equals(lt))
                 continue;
             if(sl.isAppointmentTypeAllowed(appointmentType))
                 return true;
@@ -169,8 +169,8 @@ public class BookingLibrary{
         for(int counter=0;counter<bookedAppointmentList.getAppointmentListSize();counter++){
         
             Appointment appointment = bookedAppointmentList.getAppointment(counter);
-            LocalTime appointmentStartsAtTime = appointment.getAppointmentStartLocalTime();
-            LocalTime appointmentEndAtTime = appointment.getAppointmentStartLocalTime().plusMinutes(appointment.getAppointmentType().getLengthMinutes());
+            LocalTime appointmentStartsAtTime = appointment.getAppointmentStartTime();
+            LocalTime appointmentEndAtTime = appointment.getAppointmentStartTime().plusMinutes(appointment.getAppointmentType().getLengthMinutes());
      
       
 

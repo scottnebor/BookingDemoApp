@@ -24,7 +24,7 @@ public class MemoryStorage extends AbstractStorage{
      * Store's an appointment for date.   It does no validion on details of the appointment, or whether there are conflicting appointments.
      */
     public void storeAppointment(Appointment appointment){
-        String key = appointment.getAppointmentStartLocalDateTime().format(bookingLibraryDateFormatter);
+        String key = appointment.getAppointmentStartDateTime().format(bookingLibraryDateFormatter);
         if(!appointmentDateListMap.containsKey(key))
             appointmentDateListMap.put(key, new AppointmentList());
         appointmentDateListMap.get(key).addAppointment(appointment);

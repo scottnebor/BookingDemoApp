@@ -26,13 +26,14 @@ public class AppointmentSlot{
      * function to add an allowed appointment time
      */
     public void addAllowedAppointmentType(AppointmentType appointmentType ){
-        allowedAppointmentTypes.add(appointmentType);
+        if(!isAppointmentTypeAllowed(appointmentType))
+            allowedAppointmentTypes.add(appointmentType);
     }
     
     /*
      * return the appointment time
      */
-    public LocalTime getAppointmentStartTime(){
+    public LocalTime getAppointmentSlotStartTime(){
         return this.appointmentStartTime;
     }
 
@@ -55,5 +56,12 @@ public class AppointmentSlot{
      */
     public boolean hasAppointmentTypes(){
         return (allowedAppointmentTypes.size() > 0);
+    }
+
+    /*
+     * returns the number of appointmentTypes   
+     */
+    public int getNumAppointmentTypes(){
+        return allowedAppointmentTypes.size();
     }
 }

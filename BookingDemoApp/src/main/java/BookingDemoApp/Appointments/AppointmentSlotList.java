@@ -19,7 +19,7 @@ public class AppointmentSlotList{
 
         //sorting after each add call isn't optimal from a performance perspective.  However, the number of AppointmentSlots in the list
         //will be small.  As such, simplicity was favoured over performance
-        appointmentSlots.sort((AppointmentSlot a, AppointmentSlot b) -> { return a.getAppointmentStartTime().compareTo(b.getAppointmentStartTime()); } );
+        appointmentSlots.sort((AppointmentSlot a, AppointmentSlot b) -> { return a.getAppointmentSlotStartTime().compareTo(b.getAppointmentSlotStartTime()); } );
     }
 
     public int getAppointmentSlotListSize(){

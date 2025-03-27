@@ -133,7 +133,7 @@ public class BookingLibraryTest {
         
 
         //verify that appointmentTimes match expectations
-        assertEquals(0,firstAppointment.getAppointmentStartTime().compareTo(LocalTime.of(11,0,0)));
+        assertEquals(0,firstAppointment.getAppointmentSlotStartTime().compareTo(LocalTime.of(11,0,0)));
         assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
@@ -141,33 +141,33 @@ public class BookingLibraryTest {
         assertTrue(thirdAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(thirdAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(thirdAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,thirdAppointment.getAppointmentStartTime().compareTo(LocalTime.of(12,0,0)));
+        assertEquals(0,thirdAppointment.getAppointmentSlotStartTime().compareTo(LocalTime.of(12,0,0)));
 
         assertTrue(lastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertFalse(lastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertFalse(lastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,lastAppointment.getAppointmentStartTime().compareTo(LocalTime.of(16,30,0)));
+        assertEquals(0,lastAppointment.getAppointmentSlotStartTime().compareTo(LocalTime.of(16,30,0)));
 
         assertTrue(secondLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(secondLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertFalse(secondLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,secondLastAppointment.getAppointmentStartTime().compareTo(LocalTime.of(16,0,0)));
+        assertEquals(0,secondLastAppointment.getAppointmentSlotStartTime().compareTo(LocalTime.of(16,0,0)));
 
         assertTrue(thirdLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(thirdLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(thirdLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,thirdLastAppointment.getAppointmentStartTime().compareTo(LocalTime.of(15,30,0)));
+        assertEquals(0,thirdLastAppointment.getAppointmentSlotStartTime().compareTo(LocalTime.of(15,30,0)));
 
 
         firstAppointment = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(0);
         assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,firstAppointment.getAppointmentStartTime().compareTo(LocalTime.of(9,0,0)));
+        assertEquals(0,firstAppointment.getAppointmentSlotStartTime().compareTo(LocalTime.of(9,0,0)));
 
 
         lastAppointment  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(15);
-        assertEquals(0,lastAppointment.getAppointmentStartTime().compareTo(LocalTime.of(16,30,0)));
+        assertEquals(0,lastAppointment.getAppointmentSlotStartTime().compareTo(LocalTime.of(16,30,0)));
         
         //setup some events
         assertDoesNotThrow(() -> {
@@ -182,28 +182,28 @@ public class BookingLibraryTest {
 
         //get the 9 AM slot
         AppointmentSlot appointmentSlot = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(0);
-        assertEquals(0,appointmentSlot.getAppointmentStartTime().compareTo(LocalTime.of(9,30,0)));
+        assertEquals(0,appointmentSlot.getAppointmentSlotStartTime().compareTo(LocalTime.of(9,30,0)));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
 
         //get the 10:00 AM slot 
         appointmentSlot = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(1);
-        assertEquals(0,appointmentSlot.getAppointmentStartTime().compareTo(LocalTime.of(10,0,0)));
+        assertEquals(0,appointmentSlot.getAppointmentSlotStartTime().compareTo(LocalTime.of(10,0,0)));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertFalse(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
 
         //get the 10:30 AM slot
         appointmentSlot = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(2);
-        assertEquals(0,appointmentSlot.getAppointmentStartTime().compareTo(LocalTime.of(10,30,0)));
+        assertEquals(0,appointmentSlot.getAppointmentSlotStartTime().compareTo(LocalTime.of(10,30,0)));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertFalse(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertFalse(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
 
         //get the 3:30 PM slot
         appointmentSlot = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(7);
-        assertEquals(0,appointmentSlot.getAppointmentStartTime().compareTo(LocalTime.of(15,30,0)));
+        assertEquals(0,appointmentSlot.getAppointmentSlotStartTime().compareTo(LocalTime.of(15,30,0)));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
@@ -220,7 +220,7 @@ public class BookingLibraryTest {
         appointmentSlot = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(4);
         
 
-        assertEquals(0,appointmentSlot.getAppointmentStartTime().compareTo(LocalTime.of(15,0,0)));
+        assertEquals(0,appointmentSlot.getAppointmentSlotStartTime().compareTo(LocalTime.of(15,0,0)));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
@@ -228,7 +228,7 @@ public class BookingLibraryTest {
         //get the 4:00 PM slot
         appointmentSlot = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(6);
         
-        assertEquals(0,appointmentSlot.getAppointmentStartTime().compareTo(LocalTime.of(16,0,0)));
+        assertEquals(0,appointmentSlot.getAppointmentSlotStartTime().compareTo(LocalTime.of(16,0,0)));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
         assertFalse(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
@@ -268,10 +268,10 @@ public class BookingLibraryTest {
         
         
         //verify that events are sorted in the right order and that each events time is correct
-        assertTrue(bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,20)).getAppointment(0).getAppointmentStartLocalDateTime().equals(LocalDateTime.of(2025,3,20,9,0,0)));   
-        assertTrue(bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,20)).getAppointment(1).getAppointmentStartLocalDateTime().equals(LocalDateTime.of(2025,3,20,11,0,0)));
-        assertTrue(bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,20)).getAppointment(2).getAppointmentStartLocalDateTime().equals(LocalDateTime.of(2025,3,20,13,0,0)));
-        assertTrue(bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,21)).getAppointment(0).getAppointmentStartLocalDateTime().equals(LocalDateTime.of(2025,3,21,13,0,0)));   
+        assertTrue(bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,20)).getAppointment(0).getAppointmentStartDateTime().equals(LocalDateTime.of(2025,3,20,9,0,0)));   
+        assertTrue(bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,20)).getAppointment(1).getAppointmentStartDateTime().equals(LocalDateTime.of(2025,3,20,11,0,0)));
+        assertTrue(bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,20)).getAppointment(2).getAppointmentStartDateTime().equals(LocalDateTime.of(2025,3,20,13,0,0)));
+        assertTrue(bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,21)).getAppointment(0).getAppointmentStartDateTime().equals(LocalDateTime.of(2025,3,21,13,0,0)));   
 
         //verify that each events type
         assertEquals(AppointmentType.appointmentTypeCheckin,bl.getPractitionerBookedAppointments(LocalDate.of(2025,3,20)).getAppointment(0).getAppointmentType());

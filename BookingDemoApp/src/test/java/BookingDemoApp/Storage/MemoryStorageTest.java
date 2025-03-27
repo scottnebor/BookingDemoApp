@@ -1,4 +1,4 @@
-package BookingDemoApp;
+package BookingDemoApp.Storage;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class MemoryStorageTest {
 
         appointmentList = memoryStorage.getAppointments(appointment1DateTime.toLocalDate());
         assertEquals(1,appointmentList.getAppointmentListSize());
-        assertTrue(appointment1DateTime.equals(appointmentList.getAppointment(0).getAppointmentStartLocalDateTime()));
+        assertTrue(appointment1DateTime.equals(appointmentList.getAppointment(0).getAppointmentStartDateTime()));
         assertEquals(AppointmentType.appointmentTypeCheckin,appointmentList.getAppointment(0).getAppointmentType());
         
         //add second appointment on the same day.  Verify two appointments in the right order with the right details
@@ -42,8 +42,8 @@ public class MemoryStorageTest {
         appointmentList = memoryStorage.getAppointments(appointment1DateTime.toLocalDate());
         assertEquals(2,appointmentList.getAppointmentListSize());
 
-        assertTrue(appointment2DateTime.equals(appointmentList.getAppointment(0).getAppointmentStartLocalDateTime()));
-        assertTrue(appointment1DateTime.equals(appointmentList.getAppointment(1).getAppointmentStartLocalDateTime()));
+        assertTrue(appointment2DateTime.equals(appointmentList.getAppointment(0).getAppointmentStartDateTime()));
+        assertTrue(appointment1DateTime.equals(appointmentList.getAppointment(1).getAppointmentStartDateTime()));
         assertEquals(AppointmentType.appointmentTypeStandard,appointmentList.getAppointment(0).getAppointmentType());
         assertEquals(AppointmentType.appointmentTypeCheckin,appointmentList.getAppointment(1).getAppointmentType());
 
