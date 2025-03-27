@@ -14,20 +14,20 @@ public class AppointmentSlotList{
         appointmentSlots = new ArrayList<AppointmentSlot>();
     }
 
-    public void AddAppointmentSlot(AppointmentSlot appointmentSlot){
+    public void addAppointmentSlot(AppointmentSlot appointmentSlot){
         appointmentSlots.add(appointmentSlot);
 
         //sorting after each add call isn't optimal from a performance perspective.  However, the number of AppointmentSlots in the list
         //will be small.  As such, simplicity was favoured over performance
-        appointmentSlots.sort((AppointmentSlot a, AppointmentSlot b) -> { return a.GetAppointmentStartTime().compareTo(b.GetAppointmentStartTime()); } );
+        appointmentSlots.sort((AppointmentSlot a, AppointmentSlot b) -> { return a.getAppointmentStartTime().compareTo(b.getAppointmentStartTime()); } );
     }
 
-    public int GetAppointmentSlotListSize(){
+    public int getAppointmentSlotListSize(){
         return appointmentSlots.size();
     }
 
     
-    public AppointmentSlot GetAppointmentsSlot(int index){
+    public AppointmentSlot getAppointmentsSlot(int index){
         return appointmentSlots.get(index);
     }
 

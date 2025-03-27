@@ -20,7 +20,7 @@ public class BookingLibraryException extends Exception{
     /*
      * return the error code
      */
-    public BookingLibraryErrorCode GetBookingLibraryExceptionErrorCode(){
+    public BookingLibraryErrorCode getBookingLibraryExceptionErrorCode(){
 
         return bookingLibraryExceptionErrorCode;
     }

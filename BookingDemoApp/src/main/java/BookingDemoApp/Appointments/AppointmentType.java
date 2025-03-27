@@ -34,7 +34,7 @@ public class AppointmentType{
     /*
      * returns appointment length
      */
-    public int GetLengthMinutes(){
+    public int getLengthMinutes(){
 
         return appointmentLengthMinutes;
     }

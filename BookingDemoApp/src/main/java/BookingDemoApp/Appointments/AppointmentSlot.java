@@ -8,6 +8,7 @@ import java.time.*;
  */
 public class AppointmentSlot{
     
+
     protected ArrayList<AppointmentType> allowedAppointmentTypes;
     protected LocalTime appointmentStartTime;
 
@@ -24,14 +25,14 @@ public class AppointmentSlot{
     /*
      * function to add an allowed appointment time
      */
-    public void AddAllowedAppointmentType(AppointmentType appointmentType ){
+    public void addAllowedAppointmentType(AppointmentType appointmentType ){
         allowedAppointmentTypes.add(appointmentType);
     }
     
     /*
      * return the appointment time
      */
-    public LocalTime GetAppointmentStartTime(){
+    public LocalTime getAppointmentStartTime(){
         return this.appointmentStartTime;
     }
 
@@ -39,7 +40,7 @@ public class AppointmentSlot{
     /*
      * check if an appointment type is allowed
      */
-    public boolean IsAppointmentTypeAllowed(AppointmentType appointmentType){
+    public boolean isAppointmentTypeAllowed(AppointmentType appointmentType){
         Iterator<AppointmentType> iterator = allowedAppointmentTypes.iterator();
         while(iterator.hasNext()){
             AppointmentType at = iterator.next();
@@ -52,7 +53,7 @@ public class AppointmentSlot{
     /*
      * returns true if there is at least one allowed appointment type
      */
-    public boolean HasAppointmentTypes(){
+    public boolean hasAppointmentTypes(){
         return (allowedAppointmentTypes.size() > 0);
     }
 }

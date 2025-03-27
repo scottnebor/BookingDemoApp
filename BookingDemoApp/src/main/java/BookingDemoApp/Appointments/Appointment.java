@@ -23,21 +23,21 @@ public class Appointment{
     /*
      * return appointment type
      */
-    public AppointmentType GetAppointmentType(){
+    public AppointmentType getAppointmentType(){
         return this.appointmentType;
     }
 
     /*
      * return appointment date/time
      */
-    public LocalDateTime GetAppointmentStartLocalDateTime(){
+    public LocalDateTime getAppointmentStartLocalDateTime(){
         return this.appointmentStartTime;
     }
 
     /*
      * return appointment date/time
      */
-    public LocalTime GetAppointmentStartLocalTime(){
+    public LocalTime getAppointmentStartLocalTime(){
         return this.appointmentStartTime.toLocalTime();
     }
 }
