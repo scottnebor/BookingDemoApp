@@ -20,14 +20,20 @@ public class BookingLibraryTest {
         AppointmentSlot appointmentSlot = new AppointmentSlot(LocalDateTime.of(2025,3,20,9,0,0));
         appointmentSlot.addAllowedAppointmentType(AppointmentType.appointmentTypeCheckin);
         appointmentSlotList.addAppointmentSlot(appointmentSlot);
+
+        //confirm appointmentTypes that can and cannot be booked
         assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,9,0,0)));
         assertFalse(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,9,0,0)));
 
+        //add another appointment - confirm appointmentTypes that can and cannot be booked
         appointmentSlot = new AppointmentSlot(LocalDateTime.of(2025,3,20,10,30,0));
         appointmentSlot.addAllowedAppointmentType(AppointmentType.appointmentTypeStandard);
         appointmentSlotList.addAppointmentSlot(appointmentSlot);
         assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,9,0,0)));
         assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,10,30,0)));
+
+        //check a time that there's no slot for.  Confirm it can't be booked
+        assertFalse(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,11,30,0)));
     }
 
     @Test
@@ -47,12 +53,17 @@ public class BookingLibraryTest {
         assertEquals(30,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(9,0,0), LocalTime.of(17,0,0)));
         assertEquals(30,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(10,0,0), LocalTime.of(17,0,0)));
         assertEquals(0,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(10,30,0), LocalTime.of(17,0,0)));
-        assertEquals(6*60,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(11,00,0), LocalTime.of(17,0,0)));
+        assertEquals(6*60,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(11,0,0), LocalTime.of(17,0,0)));
+
+        //one second too little.  Verify that this reduces things by a minute
+        assertEquals(6*60-1,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(11,0,1), LocalTime.of(17,0,0)));
 
     }
 
     @Test
     public void testBookAppointmentInvalidTime() {
+        //verify verify failure cases for bookingAppointments
+
         BookingLibrary bl = new BookingLibrary();
 
         //setup a fake current time - 9 AM march 20, 2025
@@ -60,7 +71,7 @@ public class BookingLibraryTest {
 
         BookingLibraryException e;
 
-        //event from the past
+        //event from the past - cannot book
         e = assertThrows(BookingLibraryException.class, () -> {
             bl.bookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,19,10,0,0) );
         });
@@ -159,7 +170,7 @@ public class BookingLibraryTest {
         //verify 0 booking slots yesterday
         assertEquals(0,bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,19)).getAppointmentSlotListSize());
 
-        //verify 12 booking slots today
+        //verify 12 booking slots today - since we can't book until 2 hours from now
         assertEquals(12,bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentSlotListSize());
 
         //verify 16 booking slots tomorrow
@@ -329,12 +340,12 @@ public class BookingLibraryTest {
 
     @Test
     public void testBookAppointments() {
+        //test booking a bunch of events that don't overlap.  All of them should succeed
         BookingLibrary bl = new BookingLibrary();
 
         //setup a fake current time - 9 AM march 20, 2025
         bl.overrideCurrentTime(LocalDateTime.of(2025,3,20,7,0,0));
 
-        //book events that don't overlap, and are valid
         assertDoesNotThrow(() -> {
             bl.bookAppointment(AppointmentType.appointmentTypeConsult,LocalDateTime.of(2025,3,20,9,0,0));
         });
