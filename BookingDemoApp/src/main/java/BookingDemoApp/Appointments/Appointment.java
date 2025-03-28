@@ -1,8 +1,6 @@
 package BookingDemoApp.Appointments;
 import java.time.*;
 
-
-
 /*
  * this class represents an appointment with an appointment date/time and appointment type
  * 
@@ -35,7 +33,7 @@ public class Appointment{
     }
 
     /*
-     * return appointment date/time
+     * return appointment time
      */
     public LocalTime getAppointmentStartTime(){
         return this.appointmentStartTime.toLocalTime();

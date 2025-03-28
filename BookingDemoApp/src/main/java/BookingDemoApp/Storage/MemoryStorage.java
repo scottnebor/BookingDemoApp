@@ -1,10 +1,8 @@
 package BookingDemoApp.Storage;
 
-
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-
 import BookingDemoApp.Appointments.*;
 
 /*
@@ -13,14 +11,14 @@ import BookingDemoApp.Appointments.*;
 public class MemoryStorage extends AbstractStorage{
     
     private HashMap<String, AppointmentList> appointmentDateListMap;
-    private DateTimeFormatter bookingLibraryDateFormatter;
+    static private DateTimeFormatter bookingLibraryDateFormatter= DateTimeFormatter.ofPattern("yyyyMMdd");
     public MemoryStorage(){
         appointmentDateListMap = new HashMap<String, AppointmentList>();
-        bookingLibraryDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
     }
 
     /*
-     * Store's an appointment for date.   It does no validion on details of the appointment, or whether there are conflicting appointments.
+     * Stores an appointment for date.   It does no validion on details of the appointment, or whether there are conflicting appointments.
      */
     public void storeAppointment(Appointment appointment){
         String key = appointment.getAppointmentStartDateTime().format(bookingLibraryDateFormatter);
@@ -31,7 +29,7 @@ public class MemoryStorage extends AbstractStorage{
     }
     
     /*
-     * Returns a list of appointments with no guarantee of order     
+     * Returns a list of appointments. Appointments will be ordered due to AppointmentList keeping things ordered  
     */
     public AppointmentList getAppointments(LocalDate appointmentDate){
         String key = appointmentDate.format(bookingLibraryDateFormatter);

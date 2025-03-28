@@ -3,7 +3,9 @@ import java.util.*;
 import java.time.*;
 
 /*
- * this class stores a collection of appointments
+ * This class represents a list of appointments.
+ * The list is maintained in a sorted order by time.
+ * Elements are accessible by index
  */
 public class AppointmentList{
     private ArrayList<Appointment> appointments;
@@ -17,7 +19,7 @@ public class AppointmentList{
     }
 
     /*
-     * adds an appointment.  Caller assumes validation checking to ensure that the appointment is valid
+     * adds an appointment.  
      */
     public void addAppointment(Appointment appointment){
         appointments.add(appointment);
@@ -36,7 +38,7 @@ public class AppointmentList{
 
     /*
      * Returns the appointment at an index.
-     * Caller is expected to ensure that indexes valid
+     * Caller is expected to ensure that index is valid
      */
     public Appointment getAppointment(int index){
         return appointments.get(index);

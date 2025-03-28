@@ -39,4 +39,12 @@ public class AppointmentType{
         return appointmentLengthMinutes;
     }
 
+    /*
+     * Function use to compare appointmentTypes.  AppointmentTypes are considered equal if they share the same length
+     */
+    public boolean equals(AppointmentType appointmentType){
+        return (this.appointmentLengthMinutes == appointmentType.appointmentLengthMinutes);
+    
+    }
+
 }

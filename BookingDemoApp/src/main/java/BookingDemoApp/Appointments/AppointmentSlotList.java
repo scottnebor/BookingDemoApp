@@ -2,7 +2,6 @@ package BookingDemoApp.Appointments;
 import java.util.*;
 import java.time.*;
 
-
 /*
  * This class represents a list of appointment slots.
  * The list is maintained in a sorted order by time.
@@ -40,7 +39,7 @@ public class AppointmentSlotList{
     
     /*
      * Returns the slot at an index.
-     * Caller is expected to ensure that indexes valid
+     * Caller is expected to ensure that index is valid
      */
     public AppointmentSlot getAppointmentsSlot(int index){
         return appointmentSlots.get(index);

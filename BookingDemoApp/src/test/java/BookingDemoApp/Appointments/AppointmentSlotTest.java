@@ -2,18 +2,16 @@ package BookingDemoApp.Appointments;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-
 import java.time.*;
-
 import BookingDemoApp.*;
-import BookingDemoApp.Appointments.*;
-
 
 public class AppointmentSlotTest {
 
   
     @Test
     public void testAppointmentSlot() {
+
+        //verify that appointmentSlots save the correct time
         LocalDateTime appointmentTime = LocalDateTime.of(2025,3,20,11,0,0);
         AppointmentSlot appointmentSlot = new AppointmentSlot(appointmentTime);
         assertTrue(appointmentSlot.getAppointmentSlotStartDateTime().equals(LocalDateTime.of(2025,3,20,11,0,0)));
@@ -42,11 +40,11 @@ public class AppointmentSlotTest {
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult) );
         assertEquals(3,appointmentSlot.getNumAppointmentTypes());
 
-        //re-add the same appointment type.  It shouldn't increase the size
+        //re-add the same appointment type.  It shouldn't increase the size or change the allowed appointment types
+        appointmentSlot.addAllowedAppointmentType(AppointmentType.appointmentTypeConsult);
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult) );
         assertEquals(3,appointmentSlot.getNumAppointmentTypes());
-        //double check that consult is still allowed
-        assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult) );
+
         
     }
     

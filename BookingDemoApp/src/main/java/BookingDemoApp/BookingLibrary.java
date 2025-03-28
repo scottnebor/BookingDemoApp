@@ -3,6 +3,7 @@ package BookingDemoApp;
 import java.time.*;
 import BookingDemoApp.Storage.*;
 import BookingDemoApp.Appointments.*;
+
 /*
  * This is the main class that integrators would use for the booking library.  It has three core functions
  *  bookAppointment
@@ -29,7 +30,7 @@ public class BookingLibrary{
     private AbstractStorage bookingLibraryStorage;
     private LocalTime clinicOpenTime;
     private LocalTime clinicCloseTime;
-    private LocalDateTime currentTime;
+    private LocalDateTime currentDateTime;
 
     /*
      * constructor
@@ -38,7 +39,7 @@ public class BookingLibrary{
         bookingLibraryStorage = new MemoryStorage();
         clinicOpenTime = LocalTime.of(CLINIC_OPEN_TIME_HOUR, CLINIC_OPEN_TIME_MIN, CLINIC_OPEN_TIME_SECOND);
         clinicCloseTime = LocalTime.of(CLINIC_CLOSE_TIME_HOUR, CLINIC_CLOSE_TIME_MIN, CLINIC_CLOSE_TIME_SECOND);
-        currentTime = LocalDateTime.now();
+        currentDateTime = LocalDateTime.now();
     }
 
     
@@ -46,7 +47,7 @@ public class BookingLibrary{
      * function should only be using by junit.  This function can be used to simulate a different date/time than the current time
      */
     protected synchronized void overrideCurrentTime(LocalDateTime overrideTime){
-        currentTime = overrideTime;
+        currentDateTime = overrideTime;
     }
 
     /*
@@ -88,7 +89,7 @@ public class BookingLibrary{
 
             //is the event within 2 hours or less.   If so, skip to the next slot
             LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
-            if(appointmentDateTime.isBefore(currentTime.plusHours(MIN_BOOKING_TIME_HOURS))){
+            if(appointmentDateTime.isBefore(currentDateTime.plusHours(MIN_BOOKING_TIME_HOURS))){
                 appointmentTime = appointmentTime.plusMinutes(BOOKING_INTERVAL_MINUTES);
                 continue;
             }

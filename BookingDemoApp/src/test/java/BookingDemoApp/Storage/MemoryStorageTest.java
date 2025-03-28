@@ -2,12 +2,10 @@ package BookingDemoApp.Storage;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-
 import java.time.*;
-
 import BookingDemoApp.*;
 import BookingDemoApp.Appointments.*;
-import BookingDemoApp.Storage.MemoryStorage;
+
 
 
 public class MemoryStorageTest {
@@ -24,12 +22,12 @@ public class MemoryStorageTest {
         LocalDateTime appointment3DateTime = LocalDateTime.of(2025,3,21,10,0,0);
         //fourth time is another day later
         LocalDateTime appointment4DateTime = LocalDateTime.of(2025,3,22,10,0,0);
-        Appointment p;
+        Appointment appointment;
         AppointmentList appointmentList;
 
         //add one appointment and verify that one is returned with the right details
-        p = new Appointment(AppointmentType.appointmentTypeCheckin,appointment1DateTime);
-        memoryStorage.storeAppointment(p);
+        appointment = new Appointment(AppointmentType.appointmentTypeCheckin,appointment1DateTime);
+        memoryStorage.storeAppointment(appointment);
 
         appointmentList = memoryStorage.getAppointments(appointment1DateTime.toLocalDate());
         assertEquals(1,appointmentList.getAppointmentListSize());
@@ -37,8 +35,8 @@ public class MemoryStorageTest {
         assertEquals(AppointmentType.appointmentTypeCheckin,appointmentList.getAppointment(0).getAppointmentType());
         
         //add second appointment on the same day.  Verify two appointments in the right order with the right details
-        p = new Appointment(AppointmentType.appointmentTypeStandard,appointment2DateTime);
-        memoryStorage.storeAppointment(p);
+        appointment = new Appointment(AppointmentType.appointmentTypeStandard,appointment2DateTime);
+        memoryStorage.storeAppointment(appointment);
         appointmentList = memoryStorage.getAppointments(appointment1DateTime.toLocalDate());
         assertEquals(2,appointmentList.getAppointmentListSize());
 
@@ -49,8 +47,8 @@ public class MemoryStorageTest {
 
 
         //add third appointment on the day 2.  Verify returned details
-        p = new Appointment(AppointmentType.appointmentTypeStandard,appointment3DateTime);
-        memoryStorage.storeAppointment(p);
+        appointment = new Appointment(AppointmentType.appointmentTypeStandard,appointment3DateTime);
+        memoryStorage.storeAppointment(appointment);
         
         appointmentList = memoryStorage.getAppointments(appointment3DateTime.toLocalDate());
         assertEquals(1,appointmentList.getAppointmentListSize());

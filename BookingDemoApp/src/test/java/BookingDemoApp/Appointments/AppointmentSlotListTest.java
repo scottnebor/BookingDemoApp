@@ -2,12 +2,8 @@ package BookingDemoApp.Appointments;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-
 import java.time.*;
-
 import BookingDemoApp.*;
-import BookingDemoApp.Appointments.*;
-
 
 public class AppointmentSlotListTest {
 

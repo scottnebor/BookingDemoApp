@@ -4,19 +4,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.*;
-
-import BookingDemoApp.*;
 import BookingDemoApp.Appointments.*;
 
 public class BookingLibraryTest {
 
-  
-    @Test
-    public void testbookAppointmentInvalidTime() {
-        BookingLibrary bl = new BookingLibrary();
 
-        //setup a fake current time - 9 AM march 20, 2025
-        bl.overrideCurrentTime(LocalDateTime.of(2025,3,20,9,0,0));
+
+    @Test
+    public void testCanbookAppointment() {
+        BookingLibrary bl = new BookingLibrary();
 
         //check if canbookAppointment correctly confirms if an appointment can be booked
         AppointmentSlotList appointmentSlotList = new AppointmentSlotList();
@@ -27,12 +23,16 @@ public class BookingLibraryTest {
         assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,9,0,0)));
         assertFalse(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,9,0,0)));
 
-        appointmentSlot = new AppointmentSlot(LocalDateTime.of(2025,3,20,10,0,0));
+        appointmentSlot = new AppointmentSlot(LocalDateTime.of(2025,3,20,10,30,0));
         appointmentSlot.addAllowedAppointmentType(AppointmentType.appointmentTypeStandard);
         appointmentSlotList.addAppointmentSlot(appointmentSlot);
         assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,9,0,0)));
-        assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,10,0,0)));
-        
+        assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,10,30,0)));
+    }
+
+    @Test
+    public void testMinutesFreeAtTimeslot() {
+        BookingLibrary bl = new BookingLibrary();
 
         //check minutesFreeAtTimeslot function by adding some appointments, and verifying how much time is available 
         AppointmentList appointmentList = new AppointmentList();
@@ -48,6 +48,15 @@ public class BookingLibraryTest {
         assertEquals(30,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(10,0,0), LocalTime.of(17,0,0)));
         assertEquals(0,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(10,30,0), LocalTime.of(17,0,0)));
         assertEquals(6*60,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(11,00,0), LocalTime.of(17,0,0)));
+
+    }
+
+    @Test
+    public void testBookAppointmentInvalidTime() {
+        BookingLibrary bl = new BookingLibrary();
+
+        //setup a fake current time - 9 AM march 20, 2025
+        bl.overrideCurrentTime(LocalDateTime.of(2025,3,20,9,0,0));
 
         BookingLibraryException e;
 
@@ -130,7 +139,7 @@ public class BookingLibraryTest {
         });
         assertEquals(BookingLibraryException.BookingLibraryErrorCode.BOOKING_EXCEPTION_INVALID_DATETIME, e.getBookingLibraryExceptionErrorCode());
 
-        //dump the date forward
+        //jump the date forward
         bl.overrideCurrentTime(LocalDateTime.of(2025,3,25,9,0,0));
 
         //event from the past
@@ -142,7 +151,7 @@ public class BookingLibraryTest {
     
 
     @Test
-    public void testgetAvailableAppointmentTimes(){
+    public void testGetAvailableAppointmentTimes(){
         BookingLibrary bl = new BookingLibrary();
         //setup a fake current time - 9 AM march 20, 2025
         bl.overrideCurrentTime(LocalDateTime.of(2025,3,20,9,0,0));
@@ -156,51 +165,51 @@ public class BookingLibraryTest {
         //verify 16 booking slots tomorrow
         assertEquals(16,bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentSlotListSize());
 
-        AppointmentSlot firstAppointment = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(0);
-        AppointmentSlot thirdAppointment = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(2);
-        AppointmentSlot thirdLastAppointment  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(9);
-        AppointmentSlot secondLastAppointment  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(10);
-        AppointmentSlot lastAppointment  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(11);
+        AppointmentSlot firstAppointmentToday = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(0);
+        AppointmentSlot thirdAppointmentToday = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(2);
+        AppointmentSlot thirdLastAppointmentToday  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(9);
+        AppointmentSlot secondLastAppointmentToday  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(10);
+        AppointmentSlot lastAppointmentToday  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,20)).getAppointmentsSlot(11);
         
 
         //verify that appointmentSlotTimes match expectations
-        assertEquals(0,firstAppointment.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,11,0,0)));
-        assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
-        assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
-        assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
+        assertEquals(0,firstAppointmentToday.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,11,0,0)));
+        assertTrue(firstAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
+        assertTrue(firstAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
+        assertTrue(firstAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
         
-        assertTrue(thirdAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
-        assertTrue(thirdAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
-        assertTrue(thirdAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,thirdAppointment.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,12,0,0)));
-
-        assertTrue(lastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
-        assertFalse(lastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
-        assertFalse(lastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,lastAppointment.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,16,30,0)));
-
-        assertTrue(secondLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
-        assertTrue(secondLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
-        assertFalse(secondLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,secondLastAppointment.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,16,0,0)));
-
-        assertTrue(thirdLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
-        assertTrue(thirdLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
-        assertTrue(thirdLastAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,thirdLastAppointment.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,15,30,0)));
-
-
-        firstAppointment = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(0);
-        assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
-        assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
-        assertTrue(firstAppointment.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
-        assertEquals(0,firstAppointment.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,21,9,0,0)));
-
-
-        lastAppointment  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(15);
-        assertEquals(0,lastAppointment.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,21,16,30,0)));
+        assertEquals(0,thirdAppointmentToday.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,12,0,0)));
+        assertTrue(thirdAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
+        assertTrue(thirdAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
+        assertTrue(thirdAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
         
-        //setup some events
+        assertEquals(0,lastAppointmentToday.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,16,30,0)));
+        assertTrue(lastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
+        assertFalse(lastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
+        assertFalse(lastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
+        
+        assertEquals(0,secondLastAppointmentToday.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,16,0,0)));
+        assertTrue(secondLastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
+        assertTrue(secondLastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
+        assertFalse(secondLastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
+        
+        assertEquals(0,thirdLastAppointmentToday.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,20,15,30,0)));
+        assertTrue(thirdLastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
+        assertTrue(thirdLastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
+        assertTrue(thirdLastAppointmentToday.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
+        
+
+
+        AppointmentSlot firstAppointmentTomorrow = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(0);
+        assertEquals(0,firstAppointmentTomorrow.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,21,9,0,0)));
+        assertTrue(firstAppointmentTomorrow.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
+        assertTrue(firstAppointmentTomorrow.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));
+        assertTrue(firstAppointmentTomorrow.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult));
+        
+        AppointmentSlot lastAppointmentTomorrow  = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(15);
+        assertEquals(0,lastAppointmentTomorrow.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,21,16,30,0)));
+        
+        //book some events for tommorrow
         assertDoesNotThrow(() -> {
             bl.bookAppointment(AppointmentType.appointmentTypeConsult,LocalDateTime.of(2025,3,21,11,0,0));
             bl.bookAppointment(AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,21,9,0,0));
@@ -277,7 +286,6 @@ public class BookingLibraryTest {
     @Test
     public void testPractionerBookedAppointments(){
         BookingLibrary bl = new BookingLibrary();
-        
 
         //setup a fake current time - 9 AM march 20, 2025
         bl.overrideCurrentTime(LocalDateTime.of(2025,3,20,7,0,0));
@@ -320,7 +328,7 @@ public class BookingLibraryTest {
     }
 
     @Test
-    public void testbookAppointments() {
+    public void testBookAppointments() {
         BookingLibrary bl = new BookingLibrary();
 
         //setup a fake current time - 9 AM march 20, 2025

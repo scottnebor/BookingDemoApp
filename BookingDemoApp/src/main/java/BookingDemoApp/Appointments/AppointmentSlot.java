@@ -2,7 +2,6 @@ package BookingDemoApp.Appointments;
 import java.util.*;
 import java.time.*;
 
-
 /*
  * This class represents a appointment time slot that could potentially be booked.  
  * It lists the start time, and the allowed appointment types that can be booked into the slot
@@ -15,7 +14,7 @@ public class AppointmentSlot{
 
     /*
      * constructor
-     * appointmentStartTime: local time of the timeslot
+     * accepts local time of the timeslot
      */
     public AppointmentSlot(LocalDateTime appointmentStartTime){
         allowedAppointmentTypes = new ArrayList<AppointmentType>();
@@ -32,7 +31,7 @@ public class AppointmentSlot{
     }
     
     /*
-     * return the appointment time
+     * return the appointment date/time
      */
     public LocalDateTime getAppointmentSlotStartDateTime(){
         return this.appointmentStartTime;
