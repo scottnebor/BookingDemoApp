@@ -36,6 +36,18 @@ Note: this code base does not have a terminal, UI or callable API.  Functionalit
   - getAvailableAppointmentTimes
   - getPractitionerBookedAppointments
 
+**Core Classes**
+- The following classes are used
+  - BookingLibrary is the core class that exposes the main business logic functions
+  - AppointmentType: class that holds information about different appointment types that can be booked
+  - Appointment: this holds an appointment that has been booked
+  - AppointmentList: this is a collection of appointments
+  - AppointmentSlot: this is timeslot that could potentially be booked
+  - AppointmentSlotList: this is a collection of AppointmentSlots
+  - BookingLibraryException: class used for exceptions when calling into BookingLibrary
+  - AbstractStorage: interface for storing Appointments
+  - MemoryStorage: class that stores Appointments in memory
+
 **Multithreading/Multiprocessing**
 - The core functions in BookingLibrary are synchronized ensuring thread safety within the BookingLibrary class
 
@@ -50,4 +62,4 @@ Note: this code base does not have a terminal, UI or callable API.  Functionalit
 - The code assumes that the clinic always opens and closes within the same day (i.e. not something like 10 PM on Monday to 1 AM on Tuesday).  Some refactoring would be needed if this is not the case.
   - For simplicity, this seems like an apppriate design choice given the requirements
 - From a performance perspective, some of the classes (ex: AppointmentSlotList) use lists, and some operations require iteration through the list.  i.e. O(n) performance 
-  - given the limited number of appointments that can be scheduled in a day, performance is not expected to be a concern.  As such, simplicity was favoured over performance optimizations
+  - given that AppointmentSlotList is only used to hold appointment slots for one day, and given the limited number of appointments that can be scheduled in a day, performance is not expected to be a concern.  As such, simplicity was favoured over performance optimizations
