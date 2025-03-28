@@ -34,7 +34,10 @@ public class AppointmentList{
         return appointments.size();
     }
 
-    //todo - document that it is the callers responsibility to ensure a valid index
+    /*
+     * Returns the appointment at an index.
+     * Caller is expected to ensure that indexes valid
+     */
     public Appointment getAppointment(int index){
         return appointments.get(index);
     }

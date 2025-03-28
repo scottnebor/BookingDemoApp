@@ -7,7 +7,6 @@ import java.time.*;
 
 import BookingDemoApp.*;
 import BookingDemoApp.Appointments.*;
-import BookingDemoApp.Storage.MemoryStorage;
 
 
 public class AppointmentSlotTest {
@@ -15,15 +14,16 @@ public class AppointmentSlotTest {
   
     @Test
     public void testAppointmentSlot() {
-        LocalTime lt = LocalTime.of(11,0,0);
-        AppointmentSlot appointmentSlot = new AppointmentSlot(lt);
+        LocalDateTime appointmentTime = LocalDateTime.of(2025,3,20,11,0,0);
+        AppointmentSlot appointmentSlot = new AppointmentSlot(appointmentTime);
+        assertTrue(appointmentSlot.getAppointmentSlotStartDateTime().equals(LocalDateTime.of(2025,3,20,11,0,0)));
+        assertTrue(appointmentSlot.getAppointmentSlotStartTime().equals(LocalTime.of(11,0,0)));
         
         //verify that no appointment types are allowed
         assertFalse(appointmentSlot.hasAppointmentTypes() );
         assertFalse(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin) );
         assertFalse(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard) );
         assertFalse(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeConsult) );
-        assertTrue(appointmentSlot.getAppointmentSlotStartTime().equals(lt)  );
         assertEquals(0,appointmentSlot.getNumAppointmentTypes());
 
 

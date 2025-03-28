@@ -8,8 +8,6 @@ import java.time.*;
 import BookingDemoApp.*;
 import BookingDemoApp.Appointments.*;
 
-
-
 public class AppointmentTypeTest {
 
   

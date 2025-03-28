@@ -58,7 +58,7 @@ public class BookingLibrary{
 
         AppointmentSlotList appointmentSlotList = getAvailableAppointmentTimes(appointmentStartDateTime.toLocalDate());
         
-        if(canbookAppointment(appointmentSlotList,appointmentType, appointmentStartDateTime.toLocalTime())){
+        if(canbookAppointment(appointmentSlotList,appointmentType, appointmentStartDateTime)){
             Appointment appointment = new Appointment(appointmentType, appointmentStartDateTime);
             bookingLibraryStorage.storeAppointment(appointment); 
         }
@@ -87,8 +87,8 @@ public class BookingLibrary{
         while (appointmentTime.isBefore(clinicCloseTime)){
 
             //is the event within 2 hours or less.   If so, skip to the next slot
-            LocalDateTime ldt = LocalDateTime.of(appointmentDate, appointmentTime);
-            if(ldt.isBefore(currentTime.plusHours(MIN_BOOKING_TIME_HOURS))){
+            LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+            if(appointmentDateTime.isBefore(currentTime.plusHours(MIN_BOOKING_TIME_HOURS))){
                 appointmentTime = appointmentTime.plusMinutes(BOOKING_INTERVAL_MINUTES);
                 continue;
             }
@@ -96,7 +96,7 @@ public class BookingLibrary{
             
 
             //build an appointmentSlot
-            AppointmentSlot appointmentSlot = new AppointmentSlot(appointmentTime);
+            AppointmentSlot appointmentSlot = new AppointmentSlot(appointmentDateTime);
 
 
             //how many minutes are free at the current appointmentSlotTime
@@ -122,13 +122,7 @@ public class BookingLibrary{
 
         }
         return appointmentSlotList;
-        
-
-        
-
     }
-
-    
 
     /*
      * function lists all booked appointments for a day
@@ -141,12 +135,13 @@ public class BookingLibrary{
     /*
      * given a list of slots, determine if there's one with a matching time and an appointment type that's allowed
      */
-    protected boolean canbookAppointment(AppointmentSlotList appointmentSlotList,AppointmentType appointmentType, LocalTime lt){
+    protected boolean canbookAppointment(AppointmentSlotList appointmentSlotList,AppointmentType appointmentType, LocalDateTime appointmentDateTime){
         for(int counter=0;counter<appointmentSlotList.getAppointmentSlotListSize();counter++){
-       
+            
             AppointmentSlot sl = appointmentSlotList.getAppointmentsSlot(counter);
-            if(!sl.getAppointmentSlotStartTime().equals(lt))
+            if(!sl.getAppointmentSlotStartDateTime().equals(appointmentDateTime))
                 continue;
+            
             if(sl.isAppointmentTypeAllowed(appointmentType))
                 return true;
         }
