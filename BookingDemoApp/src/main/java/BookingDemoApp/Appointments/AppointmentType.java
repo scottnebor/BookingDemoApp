@@ -21,12 +21,12 @@ public class AppointmentType{
     public final static AppointmentType appointmentTypeStandard = new AppointmentType(APPOINTMENT_LENGTH_STANDARD);
     public final static AppointmentType appointmentTypeConsult  = new AppointmentType(APPOINTMENT_LENGTH_CONSULT);
 
-    protected int appointmentLengthMinutes;
+    private int appointmentLengthMinutes;
 
     /*
      * protected constructor
      */
-    protected AppointmentType(int appointmentLengthMinutes){
+    private AppointmentType(int appointmentLengthMinutes){
 
         this.appointmentLengthMinutes = appointmentLengthMinutes;
     }

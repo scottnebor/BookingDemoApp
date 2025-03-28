@@ -7,29 +7,29 @@ import BookingDemoApp.Appointments.*;
  * This is the main class that integrators would use for the booking library.  It has three core functions
  *  bookAppointment
  *  getAvailableAppointmentTimes
- *  GetPractitionerBookedAppointments
+ *  getPractitionerBookedAppointments
  * 
  * Appointment booking only last the lifetime of this class.  It does not persisently store anything
  */
 public class BookingLibrary{
-    protected static final int CLINIC_OPEN_TIME_HOUR    = 9;   //9 AM - clinic start time
-    protected static final int CLINIC_OPEN_TIME_MIN     = 0;   
-    protected static final int CLINIC_OPEN_TIME_SECOND  = 0;   
+    private static final int CLINIC_OPEN_TIME_HOUR    = 9;   //9 AM - clinic start time
+    private static final int CLINIC_OPEN_TIME_MIN     = 0;   
+    private static final int CLINIC_OPEN_TIME_SECOND  = 0;   
     
-    protected static final int CLINIC_CLOSE_TIME_HOUR    = 17;   //5 PM - clinic close time
-    protected static final int CLINIC_CLOSE_TIME_MIN     = 0;   
-    protected static final int CLINIC_CLOSE_TIME_SECOND  = 0;   
+    private static final int CLINIC_CLOSE_TIME_HOUR    = 17;   //5 PM - clinic close time
+    private static final int CLINIC_CLOSE_TIME_MIN     = 0;   
+    private static final int CLINIC_CLOSE_TIME_SECOND  = 0;   
 
-    protected static final int BOOKING_INTERVAL_MINUTES  = 30;// appointments must be booked on 30 minute intervals
+    private static final int BOOKING_INTERVAL_MINUTES  = 30;// appointments must be booked on 30 minute intervals
     
-    protected static final int MIN_BOOKING_TIME_HOURS  = 2;// appointments must be booked at least 2 hours in advance
+    private static final int MIN_BOOKING_TIME_HOURS  = 2;// appointments must be booked at least 2 hours in advance
     
 
 
-    protected AbstractStorage bookingLibraryStorage;
-    protected LocalTime clinicOpenTime;
-    protected LocalTime clinicCloseTime;
-    protected LocalDateTime currentTime;
+    private AbstractStorage bookingLibraryStorage;
+    private LocalTime clinicOpenTime;
+    private LocalTime clinicCloseTime;
+    private LocalDateTime currentTime;
 
     /*
      * constructor
@@ -45,13 +45,13 @@ public class BookingLibrary{
     /*
      * function should only be using by junit.  This function can be used to simulate a different date/time than the current time
      */
-    public synchronized void overrideCurrentTime(LocalDateTime overrideTime){
+    protected synchronized void overrideCurrentTime(LocalDateTime overrideTime){
         currentTime = overrideTime;
-
     }
 
     /*
-     * Books an appointment.  Throws an exception if the appointment cannot be booked for the given date/time
+     * Books an appointment.  Throws an exception if the appointment cannot be booked for the given date/time.
+     * Throws an exception if the appointment can't be booked
      */
     public synchronized void bookAppointment(AppointmentType appointmentType, LocalDateTime appointmentStartDateTime) throws BookingLibraryException{
         
@@ -70,7 +70,7 @@ public class BookingLibrary{
     
 
     /*
-     * function that returns a list of Appointments (time, and appointment type) for a given date
+     * function that returns a list of AppointmentSlots that could potentially be booked(time, and appointment type) for a given date
      */
     public synchronized AppointmentSlotList getAvailableAppointmentTimes(LocalDate appointmentDate){
         
@@ -186,11 +186,5 @@ public class BookingLibrary{
 
     }
 
-
-    public static void main(String[] args) {
-        
-        System.out.println("Hello");
-        
-    }
 
 }

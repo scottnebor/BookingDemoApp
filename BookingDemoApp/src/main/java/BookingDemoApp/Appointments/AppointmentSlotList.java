@@ -9,7 +9,7 @@ import java.time.*;
  * Elements are accessible by index
  */
 public class AppointmentSlotList{
-    protected ArrayList<AppointmentSlot> appointmentSlots;
+    private ArrayList<AppointmentSlot> appointmentSlots;
 
     /*
      * Constructor

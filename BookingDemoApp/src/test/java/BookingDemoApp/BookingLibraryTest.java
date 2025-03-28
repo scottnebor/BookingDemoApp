@@ -17,7 +17,38 @@ public class BookingLibraryTest {
 
         //setup a fake current time - 9 AM march 20, 2025
         bl.overrideCurrentTime(LocalDateTime.of(2025,3,20,9,0,0));
+
+        //check if canbookAppointment correctly confirms if an appointment can be booked
+        AppointmentSlotList appointmentSlotList = new AppointmentSlotList();
+        assertFalse(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,9,0,0)));
+        AppointmentSlot appointmentSlot = new AppointmentSlot(LocalDateTime.of(2025,3,20,9,0,0));
+        appointmentSlot.addAllowedAppointmentType(AppointmentType.appointmentTypeCheckin);
+        appointmentSlotList.addAppointmentSlot(appointmentSlot);
+        assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,9,0,0)));
+        assertFalse(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,9,0,0)));
+
+        appointmentSlot = new AppointmentSlot(LocalDateTime.of(2025,3,20,10,0,0));
+        appointmentSlot.addAllowedAppointmentType(AppointmentType.appointmentTypeStandard);
+        appointmentSlotList.addAppointmentSlot(appointmentSlot);
+        assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeCheckin,LocalDateTime.of(2025,3,20,9,0,0)));
+        assertTrue(bl.canbookAppointment(appointmentSlotList,AppointmentType.appointmentTypeStandard,LocalDateTime.of(2025,3,20,10,0,0)));
         
+
+        //check minutesFreeAtTimeslot function by adding some appointments, and verifying how much time is available 
+        AppointmentList appointmentList = new AppointmentList();
+        assertEquals(8*60,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(9,0,0), LocalTime.of(17,0,0)));
+        assertEquals(5*60,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(12,0,0), LocalTime.of(17,0,0)));
+
+        appointmentList.addAppointment(new Appointment(AppointmentType.appointmentTypeCheckin, LocalDateTime.of(2025,3,20,9,30,0)));
+        assertEquals(30,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(9,0,0), LocalTime.of(17,0,0)));
+        assertEquals(0,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(9,30,0), LocalTime.of(17,0,0)));
+        assertEquals(7*60,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(10,0,0), LocalTime.of(17,0,0)));
+        appointmentList.addAppointment(new Appointment(AppointmentType.appointmentTypeCheckin, LocalDateTime.of(2025,3,20,10,30,0)));
+        assertEquals(30,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(9,0,0), LocalTime.of(17,0,0)));
+        assertEquals(30,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(10,0,0), LocalTime.of(17,0,0)));
+        assertEquals(0,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(10,30,0), LocalTime.of(17,0,0)));
+        assertEquals(6*60,bl.minutesFreeAtTimeslot(appointmentList, LocalTime.of(11,00,0), LocalTime.of(17,0,0)));
+
         BookingLibraryException e;
 
         //event from the past
@@ -219,7 +250,6 @@ public class BookingLibraryTest {
         //get the 2:30 PM slot
         appointmentSlot = bl.getAvailableAppointmentTimes(LocalDate.of(2025,3,21)).getAppointmentsSlot(4);
         
-
         assertEquals(0,appointmentSlot.getAppointmentSlotStartDateTime().compareTo(LocalDateTime.of(2025,3,21,15,0,0)));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeCheckin));
         assertTrue(appointmentSlot.isAppointmentTypeAllowed(AppointmentType.appointmentTypeStandard));

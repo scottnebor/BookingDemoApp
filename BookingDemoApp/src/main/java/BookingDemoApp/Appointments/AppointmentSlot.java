@@ -10,8 +10,8 @@ import java.time.*;
 public class AppointmentSlot{
     
 
-    protected ArrayList<AppointmentType> allowedAppointmentTypes;
-    protected LocalDateTime appointmentStartTime;
+    private ArrayList<AppointmentType> allowedAppointmentTypes;
+    private LocalDateTime appointmentStartTime;
 
     /*
      * constructor

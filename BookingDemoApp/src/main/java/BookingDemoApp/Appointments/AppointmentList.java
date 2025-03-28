@@ -6,7 +6,7 @@ import java.time.*;
  * this class stores a collection of appointments
  */
 public class AppointmentList{
-    protected ArrayList<Appointment> appointments;
+    private ArrayList<Appointment> appointments;
 
     /*
      * constructor

@@ -12,8 +12,8 @@ import BookingDemoApp.Appointments.*;
  */
 public class MemoryStorage extends AbstractStorage{
     
-    protected HashMap<String, AppointmentList> appointmentDateListMap;
-    protected DateTimeFormatter bookingLibraryDateFormatter;
+    private HashMap<String, AppointmentList> appointmentDateListMap;
+    private DateTimeFormatter bookingLibraryDateFormatter;
     public MemoryStorage(){
         appointmentDateListMap = new HashMap<String, AppointmentList>();
         bookingLibraryDateFormatter = DateTimeFormatter.ofPattern("yyyyMMdd");

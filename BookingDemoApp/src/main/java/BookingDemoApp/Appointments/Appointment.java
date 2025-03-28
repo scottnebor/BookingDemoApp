@@ -9,8 +9,8 @@ import java.time.*;
  */
 public class Appointment{
     
-    protected AppointmentType appointmentType;
-    protected LocalDateTime appointmentStartTime;
+    private AppointmentType appointmentType;
+    private LocalDateTime appointmentStartTime;
 
     /*
      * constuctor - accepts an appointment type and a date/time
