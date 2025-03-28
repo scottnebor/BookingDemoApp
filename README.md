@@ -46,6 +46,7 @@ Note: this code base does not have a terminal, UI or callable API.  Functionalit
 **Design Choices**
 - The Java LocalDate, LocalTime, and LocalDateTime classes were chosen to represent dates/times
   - These classes will not work if timezones need to be considered.  Given that there were no timezone requirements, these classes are appropriate
+- BookingLibrary assumes that you are executing a bunch of operations all at one point in time (i.e. time is static and not changing)
 - The code assumes that the clinic always opens and closes within the same day (i.e. not something like 10 PM on Monday to 1 AM on Tuesday).  Some refactoring would be needed if this is not the case.
   - For simplicity, this seems like an apppriate design choice given the requirements
 - From a performance perspective, some of the classes (ex: AppointmentSlotList) use lists, and some operations require iteration through the list.  i.e. O(n) performance 
